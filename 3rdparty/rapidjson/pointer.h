@@ -24,7 +24,7 @@
 
 #ifdef __clang__
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(switch - enum)
+RAPIDJSON_DIAG_OFF(switch-enum)
 #elif defined(_MSC_VER)
 RAPIDJSON_DIAG_PUSH
 RAPIDJSON_DIAG_OFF(4512)  // assignment operator could not be generated

@@ -23,7 +23,7 @@
 
 #ifdef __clang__
 RAPIDJSON_DIAG_PUSH
-RAPIDJSON_DIAG_OFF(switch - enum)
+RAPIDJSON_DIAG_OFF(switch-enum)
 RAPIDJSON_DIAG_OFF(covered - switch - default)
 #endif
 
