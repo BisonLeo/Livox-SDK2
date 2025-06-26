@@ -564,6 +564,15 @@ struct char_traits<char> {
   template <typename T>
   FMT_API static int format_float(char *buffer, std::size_t size,
       const char *format, int precision, T value);
+  
+  // String operations
+  static std::size_t length(const char *s) {
+    return std::char_traits<char>::length(s);
+  }
+  
+  static int compare(const char *s1, const char *s2, std::size_t n) {
+    return std::char_traits<char>::compare(s1, s2, n);
+  }
 };
 
 template <>
@@ -571,7 +580,42 @@ struct char_traits<wchar_t> {
   template <typename T>
   FMT_API static int format_float(wchar_t *buffer, std::size_t size,
       const wchar_t *format, int precision, T value);
+  
+  // String operations
+  static std::size_t length(const wchar_t *s) {
+    return std::char_traits<wchar_t>::length(s);
+  }
+  
+  static int compare(const wchar_t *s1, const wchar_t *s2, std::size_t n) {
+    return std::char_traits<wchar_t>::compare(s1, s2, n);
+  }
 };
+
+#if !defined(__cpp_char8_t)
+template <>
+struct char_traits<char8_t> {
+  template <typename T>
+  FMT_API static int format_float(char8_t *buffer, std::size_t size,
+      const char8_t *format, int precision, T value);
+  
+  // String operations
+#if defined(__clang__)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  static std::size_t length(const char8_t *s) {
+    return std::char_traits<unsigned char>::length(reinterpret_cast<const unsigned char*>(s));
+  }
+  
+  static int compare(const char8_t *s1, const char8_t *s2, std::size_t n) {
+    return std::char_traits<unsigned char>::compare(reinterpret_cast<const unsigned char*>(s1), 
+                                                   reinterpret_cast<const unsigned char*>(s2), n);
+  }
+#if defined(__clang__)
+  #pragma clang diagnostic pop
+#endif
+};
+#endif
 
 #if FMT_USE_EXTERN_TEMPLATES
 extern template int char_traits<char>::format_float<double>(
@@ -587,6 +631,15 @@ extern template int char_traits<wchar_t>::format_float<double>(
 extern template int char_traits<wchar_t>::format_float<long double>(
     wchar_t *buffer, std::size_t size, const wchar_t* format, int precision,
     long double value);
+
+#if !defined(__cpp_char8_t)
+extern template int char_traits<char8_t>::format_float<double>(
+    char8_t *buffer, std::size_t size, const char8_t* format, int precision,
+    double value);
+extern template int char_traits<char8_t>::format_float<long double>(
+    char8_t *buffer, std::size_t size, const char8_t* format, int precision,
+    long double value);
+#endif
 #endif
 
 template <typename Container>

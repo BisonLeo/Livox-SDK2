@@ -368,8 +368,15 @@ class basic_string_view {
     the size with ``std::char_traits<Char>::length``.
     \endrst
    */
+#if defined(__clang__) && !defined(__cpp_char8_t)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
   basic_string_view(const Char *s)
     : data_(s), size_(std::char_traits<Char>::length(s)) {}
+#if defined(__clang__) && !defined(__cpp_char8_t)
+  #pragma clang diagnostic pop
+#endif
 
   /** Constructs a string reference from a ``std::basic_string`` object. */
   template <typename Alloc>
@@ -397,6 +404,10 @@ class basic_string_view {
   }
 
   // Lexicographically compare this string reference to other.
+#if defined(__clang__) && !defined(__cpp_char8_t)
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
   int compare(basic_string_view other) const {
     size_t str_size = size_ < other.size_ ? size_ : other.size_;
     int result = std::char_traits<Char>::compare(data_, other.data_, str_size);
@@ -404,6 +415,9 @@ class basic_string_view {
       result = size_ == other.size_ ? 0 : (size_ < other.size_ ? -1 : 1);
     return result;
   }
+#if defined(__clang__) && !defined(__cpp_char8_t)
+  #pragma clang diagnostic pop
+#endif
 
   friend bool operator==(basic_string_view lhs, basic_string_view rhs) {
     return lhs.compare(rhs) == 0;
