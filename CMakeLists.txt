@@ -6,6 +6,12 @@ set(CMAKE_CXX_STANDARD 11)
 
 message(STATUS "main project dir: " ${PROJECT_SOURCE_DIR})
 
+# Find ROS 2 ament packages
+find_package(ament_cmake REQUIRED)
+# find dependencies
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
+
 if (CMAKE_CROSSCOMPILING)
 	set(THREADS_PTHREAD_ARG
 		"PLEASE_FILL_OUT-FAILED_TO_RUN"
@@ -18,3 +24,6 @@ endif(UNIX)
 
 add_subdirectory(sdk_core)
 add_subdirectory(samples)
+
+ament_package()
+

@@ -17,7 +17,7 @@ set(LIVOX_API_HEADER
         ../include/livox_lidar_cfg.h
         )
 
-set_target_properties(${SDK_LIBRARY_STATIC} #${SDK_LIBRARY_SHARED} 
+set_target_properties(${SDK_LIBRARY_STATIC} ${SDK_LIBRARY_SHARED}
         PROPERTIES
         PUBLIC_HEADER "${LIVOX_API_HEADER}"
         )
@@ -137,7 +137,22 @@ target_sources(${SDK_LIBRARY_SHARED}
         ${LIVOX_SOURCES}
         )
 
+# Install targets
 install(TARGETS ${SDK_LIBRARY_STATIC} ${SDK_LIBRARY_SHARED}
         PUBLIC_HEADER DESTINATION include
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib)
+
+# Installation targets for header files
+install(FILES ${LIVOX_API_HEADER}
+        DESTINATION include/${PROJECT_NAME}
+        )
+
+# Export include directories and libraries for ament
+ament_export_include_directories(${LIVOX_PUBLIC_INCLUDE_DIR})
+
+# Export libraries properly
+ament_export_libraries(${SDK_LIBRARY_STATIC} ${SDK_LIBRARY_SHARED})
+
+# Export dependencies
+ament_export_dependencies(ament_cmake)
