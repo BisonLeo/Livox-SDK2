@@ -33,6 +33,8 @@
 #include <sys/fcntl.h>
 #include <fcntl.h>
 
+#include <iostream>
+
 Synchro::Synchro() {
   fd_ = 0; 
   is_quit_ = false;
@@ -198,7 +200,7 @@ int Synchro::Setup(enum BaudRate baud, enum Parity parity) {
   baudrate = baud_map[baud];
   cfsetispeed(&options, baudrate);
   cfsetospeed(&options, baudrate);
-  printf("[Baudrate]: %d %lu\r\n", baud, baudrate);
+  std::cout << "[Baudrate]: " << baud << " " << baudrate << std::endl;
 
   switch (parity) {
     case P_8N1:
